@@ -12,16 +12,16 @@ const StatDisplay: React.FC<{ label: string; value: number }> = ({ label, value 
     </Box>
 );
 
-export const CupCard: React.FC<CupCardProps> = ({ cup, tier, onTierChange }) => {
+export const CupCard: React.FC<CupCardProps> = ({ cup, tier, onTierChange, wave }) => {
     const tierLabel = `Tier ${tier} Health`;
     const tierDamageLabel = `Tier ${tier} Damage`;
     
     const finalDifficulty = cup.difficultyMultiplier * tierDifficultyMultipliers[tier - 1];
 
     const { health, damage } = useMemo(() => ({
-        health: calculateEnemyHealth(1, finalDifficulty),
-        damage: calculateEnemyDamage(1, finalDifficulty),
-    }), [finalDifficulty]);
+        health: calculateEnemyHealth(wave, finalDifficulty),
+        damage: calculateEnemyDamage(wave, finalDifficulty),
+    }), [finalDifficulty, wave]);
 
     return (
         <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>

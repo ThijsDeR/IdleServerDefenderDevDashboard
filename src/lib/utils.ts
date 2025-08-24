@@ -56,34 +56,26 @@ const getCupProgressionFactor = (d: number): number => {
  * Calculates enemy health based on wave (x) and a difficulty multiplier (d).
  */
 export const calculateEnemyHealth = (x: number, d: number): number => {
-    // A base health value for a Wave 1, Malware Maze enemy.
-    const baseHealth = 25;
+    const baseHealth = 5;
 
-    // The progressive scaling factor derived from the cup's difficulty.
     const cupFactor = getCupProgressionFactor(d);
 
-    // The wave multiplier remains the same.
-    const waveMultiplier = Math.pow(10, (x - 1) / 150);
+    const waveMultiplier = (1 + (x - 1) * 0.5) + Math.pow(10, (x - 1) / 100) - 1;
 
-    // Final health combines all factors.
-    return baseHealth * cupFactor * waveMultiplier;
+    return (baseHealth * cupFactor * waveMultiplier) + cupFactor;
 };
 
 /**
  * Calculates enemy damage based on wave (x) and a difficulty multiplier (d).
  */
 export const calculateEnemyDamage = (x: number, d: number): number => {
-    // A base damage value, proportional to the base health.
-    const baseDamage = 5;
+    const baseDamage = 1;
 
-    // Use the same progression factor as health.
-    const cupFactor = getCupProgressionFactor(d);
+    const cupFactor = getCupProgressionFactor(d / 2);
 
-    // Use the same wave multiplier as health.
-    const waveMultiplier = Math.pow(10, (x - 1) / 150);
+    const waveMultiplier = (1 + (x - 1) * 0.5) + Math.pow(10, (x - 1) / 200) - 1;
 
-    // Final damage combines all factors.
-    return baseDamage * cupFactor * waveMultiplier;
+    return (baseDamage * cupFactor * waveMultiplier) + cupFactor;
 };
 
 /**

@@ -16,7 +16,7 @@ import {
     TableRow,
     TableCell,
     TableBody,
-    type SelectChangeEvent
+    type SelectChangeEvent,
 } from '@mui/material';
 
 import { cups, tierDifficultyMultipliers } from '../data/gameData';

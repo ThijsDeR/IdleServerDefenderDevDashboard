@@ -137,4 +137,5 @@ export interface CupCardProps {
     cup: Cup;
     tier: number;
     onTierChange: (cupId: string, tier: number) => void;
+    wave: number;
 }

@@ -25,4 +25,4 @@ export const tierDifficultyMultipliers: number[] = [1, 1.1, 1.25, 1.45, 1.7];
 /**
  * Specific wave numbers to show in the snapshot view.
  */
-export const snapshotWaves: number[] = [10, 50, 100, 200, 1000];
+export const snapshotWaves: number[] = [1, 10, 25, 50, 100, 200, 500, 1000];

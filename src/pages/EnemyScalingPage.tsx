@@ -10,7 +10,8 @@ import {
     MenuItem,
     Box,
     Paper,
-    type SelectChangeEvent
+    type SelectChangeEvent,
+    TextField
 } from '@mui/material';
 
 import { cups, tierDifficultyMultipliers, snapshotWaves } from '../data/gameData';
@@ -31,9 +32,10 @@ export const EnemyScalingPage: React.FC = () => {
     // State for the main snapshot view controls
     const [snapshotCupId, setSnapshotCupId] = useState<string>(cups[0].id);
     const [snapshotTier, setSnapshotTier] = useState<number>(1);
+    const [wave, setWave] = useState<number>(1);
 
     const snapshotCup = cups.find(c => c.id === snapshotCupId);
-    
+
     if (!snapshotCup) {
         return <Typography color="error">Error: Cup not found!</Typography>;
     }
@@ -80,7 +82,7 @@ export const EnemyScalingPage: React.FC = () => {
                 </Box>
                 <Grid container spacing={2}>
                     {snapshotWaves.map(wave => (
-                        <Grid size={{xs: 12, sm: 6, md: 4, lg: 2.4}} key={wave}>
+                        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2.4 }} key={wave}>
                             <Paper variant="outlined" sx={{ p: 2, textAlign: 'center' }}>
                                 <Typography variant="h6">Wave {wave}</Typography>
                                 <Box mt={1} textAlign="left">
@@ -99,14 +101,22 @@ export const EnemyScalingPage: React.FC = () => {
 
             {/* Cup Tiers Section */}
             <Box>
-                <Typography variant="h4" component="h2" mb={3}>Cup Tiers (Wave 1 Stats)</Typography>
+                <Typography variant="h4" component="h2" mb={3}>Cup Tiers (Wave {wave} Stats)</Typography>
+                <TextField
+                    label="Wave Amount"
+                    type="number"
+                    value={wave}
+                    onChange={(e) => setWave(parseInt(e.target.value) || 0)}
+                    sx={{ mb: 3 }}
+                />
                 <Grid container spacing={3}>
                     {cups.map(cup => (
-                        <Grid size={{xs: 12, sm: 6, md: 4, lg: 3}} key={cup.id}>
+                        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={cup.id}>
                             <CupCard
                                 cup={cup}
                                 tier={selectedTiers[cup.id]}
                                 onTierChange={handleTierChange}
+                                wave={wave}
                             />
                         </Grid>
                     ))}
