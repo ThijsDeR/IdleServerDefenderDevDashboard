@@ -74,14 +74,14 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({ upgrade, onOverrideCha
         const affordableBase = calculateAffordableLevels(
             upgrade.baseLevel,
             upgrade.maxBaseLevel,
-            effectiveCoins,
+            effectiveCoins / 2,
             upgrade.coinCostFormula
         );
 
         const affordableIncrease = calculateAffordableLevels(
             upgrade.increaseLevel,
             upgrade.maxIncreaseLevel,
-            effectiveCoins,
+            effectiveCoins / 2,
             upgrade.coinCostFormula
         );
 
