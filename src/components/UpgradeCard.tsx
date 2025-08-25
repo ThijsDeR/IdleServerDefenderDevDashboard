@@ -1,12 +1,15 @@
 // src/components/UpgradeCard.tsx
 import React, { useMemo } from 'react';
-import { Card, CardContent, Typography, Box, TextField, Divider } from '@mui/material';
-import type { UpgradeState } from '../types';
+import { Card, CardContent, Typography, Box, TextField, Divider, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
+import type { Boost, UpgradeState } from '../types';
 import { calculateAffordableLevels, getValueForSingleLevel } from '../lib/formulas';
+import { ExpandMoreOutlined } from '@mui/icons-material';
+import { BoostEditor } from './BoostEditor';
 
 interface UpgradeCardProps {
     upgrade: UpgradeState;
     onOverrideChange: (id: string, value: number) => void;
+    onBoostsChange: (id: string, type: 'general' | 'base' | 'increase', newBoosts: Boost[]) => void;
     coinsAvailable: number;
     speedDividerValue: number;
     timePassed: number;
@@ -44,7 +47,7 @@ function calculateUpgradesInTime(
                 Math.pow(
                     2,
                     currentUpgrades /
-                        Math.max(4 * Math.sqrt(currentUpgrades), 1)
+                    Math.max(4 * Math.sqrt(currentUpgrades), 1)
                 ) +
                 currentUpgrades) /
             speedDividerValue;
@@ -64,7 +67,7 @@ function calculateUpgradesInTime(
 
 
 
-export const UpgradeCard: React.FC<UpgradeCardProps> = ({ upgrade, onOverrideChange, coinsAvailable, speedDividerValue, timePassed }) => {
+export const UpgradeCard: React.FC<UpgradeCardProps> = ({ upgrade, onOverrideChange, onBoostsChange, coinsAvailable, speedDividerValue, timePassed }) => {
 
     const { affordableLevels, baseValue, increaseValue, endValue } = useMemo(() => {
         // Use the override value if it exists, otherwise use the coins passed in props
@@ -85,9 +88,30 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({ upgrade, onOverrideCha
             upgrade.coinCostFormula
         );
 
+        const generalBoosts = upgrade.generalBoosts || [];
+        const baseBoosts = [...generalBoosts, ...(upgrade.baseBoosts || [])];
+        const increaseBoosts = [...generalBoosts, ...(upgrade.increaseBoosts || [])];
+
         // Calculate the base and increase values using their respective formulas
-        const base = getValueForSingleLevel(affordableBase, upgrade.baseValueFormula);
-        const increase = getValueForSingleLevel(affordableIncrease, upgrade.increaseValueFormula);
+        let base = getValueForSingleLevel(affordableBase, upgrade.baseValueFormula);
+
+        baseBoosts.forEach((boost) => {
+            if (boost.type === "additive") {
+                base += boost.value;
+            } else {
+                base *= boost.value;
+            }
+        });
+
+        let increase = getValueForSingleLevel(affordableIncrease, upgrade.increaseValueFormula);
+
+        increaseBoosts.forEach((boost) => {
+            if (boost.type === "additive") {
+                increase += boost.value;
+            } else {
+                increase *= boost.value;
+            }
+        });
 
         // The total value is the base value plus the increase value.
         const total = base + (increase * calculateUpgradesInTime(upgrade.baseUpgradeTime, timePassed, upgrade.id === "speedDivider" ? 1 : speedDividerValue));
@@ -107,7 +131,7 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({ upgrade, onOverrideCha
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 2, minHeight: '40px' }}>
                     {upgrade.description}
                 </Typography>
-                
+
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <Typography variant="caption">
                         Type: {upgrade.type}
@@ -122,7 +146,7 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({ upgrade, onOverrideCha
                         <Divider sx={{ my: 1 }} />
                         <StatDisplay label="Affordable Levels" value={`${affordableLevels} / ${upgrade.maxBaseLevel - upgrade.baseLevel}`} />
                     </Box>
-                    
+
                     <TextField
                         label="Available Coins Override"
                         type="number"
@@ -133,6 +157,35 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({ upgrade, onOverrideCha
                         placeholder={`Default (from mode)`}
                     />
                 </Box>
+
+                {/* Boosts Section */}
+                <Accordion sx={{ boxShadow: 'none', border: '1px solid rgba(255, 255, 255, 0.12)' }}>
+                    <AccordionSummary expandIcon={<ExpandMoreOutlined />}>
+                        <Typography variant="subtitle1">Modifiers & Boosts</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                            <Divider>General Boosts</Divider>
+                            {/* Editor for General Value Boosts */}
+                            <BoostEditor
+                                boosts={upgrade.generalBoosts ?? []}
+                                onBoostsChange={(newBoosts) => onBoostsChange(upgrade.id, 'general', newBoosts)}
+                            />
+                            <Divider>Base Boosts</Divider>
+                            {/* Editor for Base Value Boosts */}
+                            <BoostEditor
+                                boosts={upgrade.baseBoosts ?? []}
+                                onBoostsChange={(newBoosts) => onBoostsChange(upgrade.id, 'base', newBoosts)}
+                            />
+                            <Divider>Increase Boosts</Divider>
+                            {/* Editor for Increase Value Boosts */}
+                            <BoostEditor
+                                boosts={upgrade.increaseBoosts ?? []}
+                                onBoostsChange={(newBoosts) => onBoostsChange(upgrade.id, 'increase', newBoosts)}
+                            />
+                        </Box>
+                    </AccordionDetails>
+                </Accordion>
             </CardContent>
         </Card>
     );

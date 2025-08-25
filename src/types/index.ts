@@ -10,6 +10,8 @@ export interface Cup {
     name: string;
     abbreviation: string;
     difficultyMultiplier: number;
+    coinMultiplier: number;
+    experienceMultiplier: number;
 }
 
 // --- UPGRADE AND FORMULA TYPES ---
@@ -107,7 +109,18 @@ export interface Upgrade {
     coinCostFormula: Formula;
     baseValueFormula: Formula;
     increaseValueFormula: Formula;
+    generalBoosts?: Boost[];
+    baseBoosts?: Boost[];
+    increaseBoosts?: Boost[];
 }
+
+export interface Boost {
+    name: string;
+    type: BoostType;
+    value: number;
+}
+
+export type BoostType = 'additive' | 'multiplicative';
 
 /**
  * Represents the dynamic state of an upgrade, including player progress.

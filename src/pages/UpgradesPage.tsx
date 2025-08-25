@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Container, Typography, Box, Paper, Grid, TextField, ToggleButtonGroup, ToggleButton } from '@mui/material';
 import { initialUpgrades } from '../data/upgradeData';
-import type { UpgradeState } from '../types';
+import type { Boost, UpgradeState } from '../types';
 import { UpgradeCard } from '../components/UpgradeCard';
 
 type CoinDistributionMode = 'shared' | 'individual';
@@ -25,6 +25,23 @@ export const UpgradesPage: React.FC = () => {
         );
     };
 
+    // Add this function inside your UpgradesPage component
+    const handleBoostsChange = (id: string, type: 'general' | 'base' | 'increase', newBoosts: Boost[]) => {
+        setUpgrades(prev =>
+            prev.map(u => {
+                if (u.id === id) {
+                    // Create a new object for the specific upgrade
+                    const updatedUpgrade = { ...u };
+                    if (type === 'general') updatedUpgrade.generalBoosts = newBoosts;
+                    else if (type === 'base') updatedUpgrade.baseBoosts = newBoosts;
+                    else updatedUpgrade.increaseBoosts = newBoosts;
+                    return updatedUpgrade;
+                }
+                return u; // Return other upgrades unchanged
+            })
+        );
+    };
+
     return (
         <Container maxWidth="xl" sx={{ py: 4 }}>
             <Box sx={{ textAlign: 'center', mb: 4 }}>
@@ -44,7 +61,7 @@ export const UpgradesPage: React.FC = () => {
                         <ToggleButton value="shared">All Upgrades Share Coins</ToggleButton>
                         <ToggleButton value="individual">Each Upgrade Gets Coins</ToggleButton>
                     </ToggleButtonGroup>
-                    
+
                     {mode === 'shared' ? (
                         <TextField
                             label="Total Shared Coins"
@@ -95,14 +112,14 @@ export const UpgradesPage: React.FC = () => {
                     // based on the current distribution mode.
                     let coinsAvailable = mode === 'shared' ? (sharedCoins / upgrades.length) : individualCoins;
                     if (upgrade.availableCoins !== undefined) coinsAvailable = upgrade.availableCoins;
-                    
+
 
                     return (
-                        <Grid size={{xs: 12, md: 6, lg: 4}} key={upgrade.id}>
+                        <Grid size={{ xs: 12, md: 6, lg: 4 }} key={upgrade.id}>
                             <UpgradeCard
                                 upgrade={upgrade}
                                 onOverrideChange={handleOverrideChange}
-                                // Pass the calculated coins down to the card
+                                onBoostsChange={handleBoostsChange}
                                 coinsAvailable={coinsAvailable}
                                 speedDividerValue={speedDivider}
                                 timePassed={waveDuration * waveAmount}

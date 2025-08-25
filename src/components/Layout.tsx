@@ -2,7 +2,7 @@
 import React from 'react';
 import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar } from '@mui/material';
 import { Link, Outlet } from 'react-router-dom';
-import { HomeOutlined, SecurityOutlined, UpgradeOutlined } from '@mui/icons-material';
+import { HomeOutlined, SecurityOutlined, SimCardOutlined, UpgradeOutlined } from '@mui/icons-material';
 
 const drawerWidth = 240;
 
@@ -44,6 +44,14 @@ export const Layout: React.FC = () => {
                                     <UpgradeOutlined />
                                 </ListItemIcon>
                                 <ListItemText primary="Upgrades" />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <ListItemButton component={Link} to="/GameSimulator">
+                                <ListItemIcon>
+                                    <SimCardOutlined />
+                                </ListItemIcon>
+                                <ListItemText primary="Game Simulator" />
                             </ListItemButton>
                         </ListItem>
                     </List>

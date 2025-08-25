@@ -87,3 +87,31 @@ export const formatNumber = (num: number): string => {
     }
     return num.toExponential(2);
 };
+
+
+/**
+ * Calculates enemy spawn time based on wave and difficulty.
+ * @param wave The current wave number (1-based).
+ * @param difficulty The difficulty multiplier.
+ * @param baseEnemySpawnTime The base spawn time for an enemy.
+ * @param enemyMinSpawnTime The minimum allowed spawn time.
+ * @param spawnRateBoost Optional. Multiplier for spawn rate boosts (default 1).
+ * @returns The calculated enemy spawn time.
+ */
+export function calculateEnemySpawnTime(
+    wave: number,
+    difficulty: number,
+    baseEnemySpawnTime: number = 2,
+    enemyMinSpawnTime: number = 0.05,
+    spawnRateBoost: number = 1,
+): number {
+    let spawnTime = baseEnemySpawnTime / (
+        1 +
+        (wave * Math.sqrt(wave)) /
+            (10000 * (1 / difficulty))
+    );
+
+    spawnTime = Math.max(spawnTime, enemyMinSpawnTime);
+
+    return spawnTime / spawnRateBoost;
+}

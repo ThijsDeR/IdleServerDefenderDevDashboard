@@ -9,6 +9,7 @@ import { Layout } from './components/Layout';
 import { EnemyScalingPage } from './pages/EnemyScalingPage';
 import { HomePage } from './pages/HomePage';
 import { UpgradesPage } from './pages/UpgradesPage';
+import { GameSimulatorPage } from './pages/GameSimulatorPage';
 
 const App: React.FC = () => {
     return (
@@ -25,6 +26,7 @@ const App: React.FC = () => {
                         <Route index element={<HomePage />} />
                         <Route path="EnemyScaling" element={<EnemyScalingPage />} />
                         <Route path="Upgrades" element={<UpgradesPage />} />
+                        <Route path="GameSimulator" element={<GameSimulatorPage />} />
                     </Route>
                 </Routes>
             </BrowserRouter>
