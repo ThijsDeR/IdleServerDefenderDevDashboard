@@ -67,11 +67,12 @@ export const initialUpgrades: Upgrade[] = [
         baseCoinCost: 5000,
         baseUpgradeTime: 60,
         coinCostFormula: { ...defaultMediumCoinCostFormula, baseAmount: 5000 },
-        baseValueFormula: { type: FormulaTypes.Increase, baseAmount: 0, increaseAmount: 5 },
-        increaseValueFormula: { type: FormulaTypes.Increase, baseAmount: 0.2, increaseAmount: 0.2 },
+        baseValueFormula: { type: FormulaTypes.Increase, baseAmount: 20, increaseAmount: 20 },
+        increaseValueFormula: { type: FormulaTypes.Increase, baseAmount: 2, increaseAmount: 2 },
         generalBoosts: [
             { name: 'CPW Download', type: 'multiplicative', value: 1 }
         ],
+        maxValue: 2000000
     },
     {
         id: 'cashPerWave',
@@ -88,6 +89,7 @@ export const initialUpgrades: Upgrade[] = [
         generalBoosts: [
             { name: 'BPW Download', type: 'multiplicative', value: 1 }
         ],
+        maxValue: 200000
     },
     {
         id: 'cashPerEnemy',
@@ -109,7 +111,8 @@ export const initialUpgrades: Upgrade[] = [
         ],
         increaseBoosts: [
             { name: 'BPE Prestige', type: 'multiplicative', value: 1 }
-        ]
+        ],
+        maxValue: 100,
     },
     {
         id: 'coinsPerEnemy',
@@ -120,9 +123,38 @@ export const initialUpgrades: Upgrade[] = [
         maxIncreaseLevel: 10000,
         baseCoinCost: 100,
         baseUpgradeTime: 60,
-        coinCostFormula: { ...defaultMediumCoinCostFormula, baseAmount: 100 },
-        baseValueFormula: { type: FormulaTypes.Increase, baseAmount: 1, increaseAmount: 0.1 },
-        increaseValueFormula: { type: FormulaTypes.Increase, baseAmount: 0.01, increaseAmount: 0.01 },
+        coinCostFormula: {
+            type: 'advanced',
+            baseAmount: 100,
+            parts: [
+                {
+                    count: 100,
+                    increaseAmount: 100,
+                    multiplierPer: 1.1,
+                    multiplierPerAmount: 10
+                },
+                {
+                    count: 400,
+                    increaseAmount: 1000,
+                    multiplierPer: 1.5,
+                    multiplierPerAmount: 20
+                },
+                {
+                    count: 1500,
+                    increaseAmount: 10000,
+                    multiplierPer: 2,
+                    multiplierPerAmount: 50
+                },
+                {
+                    count: 8000,
+                    increaseAmount: 100000,
+                    multiplierPer: 2.5,
+                    multiplierPerAmount: 100
+                }
+            ]
+        },
+        baseValueFormula: { type: FormulaTypes.Increase, baseAmount: 1, increaseAmount: 0.02 },
+        increaseValueFormula: { type: FormulaTypes.Increase, baseAmount: 0.01, increaseAmount: 0.002 },
         generalBoosts: [
             { name: 'CPE Download', type: 'multiplicative', value: 1 }
         ],
@@ -131,7 +163,8 @@ export const initialUpgrades: Upgrade[] = [
         ],
         increaseBoosts: [
             { name: 'CPE Prestige', type: 'multiplicative', value: 1 }
-        ]
+        ],
+        maxValue: 1000
     },
     {
         id: 'speedDivider',
@@ -155,7 +188,8 @@ export const initialUpgrades: Upgrade[] = [
         ],
         increaseBoosts: [
             { name: 'SD Prestige', type: 'multiplicative', value: 1 },
-        ]
+        ],
+        maxValue: 10000
     },
     {
         id: 'health',
@@ -252,7 +286,8 @@ export const initialUpgrades: Upgrade[] = [
         ],
         increaseBoosts: [
             { name: 'Attack Speed Prestige', type: 'multiplicative', value: 1 },
-        ]
+        ],
+        maxValue: 10
     },
     {
         id: 'critDamage',
@@ -274,7 +309,8 @@ export const initialUpgrades: Upgrade[] = [
         ],
         increaseBoosts: [
             { name: 'Crit Damage Prestige', type: 'multiplicative', value: 1 },
-        ]
+        ],
+        maxValue: 10,
     },
     {
         id: 'critChance',
@@ -294,7 +330,8 @@ export const initialUpgrades: Upgrade[] = [
         ],
         increaseBoosts: [
             { name: 'Crit Chance Prestige', type: 'multiplicative', value: 1 },
-        ]
+        ],
+        maxValue: 40,
     },
     {
         id: 'defense',
@@ -314,7 +351,8 @@ export const initialUpgrades: Upgrade[] = [
         ],
         increaseBoosts: [
             { name: 'Defense Prestige', type: 'multiplicative', value: 1 },
-        ]
+        ],
+        maxValue: 60,
     },
     {
         id: 'stunChance',
@@ -334,7 +372,8 @@ export const initialUpgrades: Upgrade[] = [
         ],
         increaseBoosts: [
             { name: 'Stun Chance Prestige', type: 'multiplicative', value: 1 },
-        ]
+        ],
+        maxValue: 2,
     },
     {
         id: 'stunDuration',
@@ -354,7 +393,8 @@ export const initialUpgrades: Upgrade[] = [
         ],
         increaseBoosts: [
             { name: 'Stun Duration Prestige', type: 'multiplicative', value: 1 },
-        ]
+        ],
+        maxValue: 4,
     },
     {
         id: 'chargeDamage',
@@ -373,7 +413,8 @@ export const initialUpgrades: Upgrade[] = [
         ],
         increaseBoosts: [
             { name: 'Charge Damage Module', type: 'multiplicative', value: 1 },
-        ]
+        ],
+        maxValue: 10,
     },
     {
         id: 'chargeDuration',
@@ -385,8 +426,9 @@ export const initialUpgrades: Upgrade[] = [
         baseCoinCost: 100,
         baseUpgradeTime: 60,
         coinCostFormula: { ...defaultExpensiveCoinCostFormula, baseAmount: 100 },
-        baseValueFormula: { type: FormulaTypes.Increase, baseAmount: 0, increaseAmount: 0.1 },
-        increaseValueFormula: { type: FormulaTypes.Increase, baseAmount: 0.01, increaseAmount: 0.01 }
+        baseValueFormula: { type: FormulaTypes.Increase, baseAmount: 100, increaseAmount: -0.1 },
+        increaseValueFormula: { type: FormulaTypes.Increase, baseAmount: -0.01, increaseAmount: -0.01 },
+        maxValue: 10,
     },
     {
         id: 'shield',

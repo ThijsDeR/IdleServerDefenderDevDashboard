@@ -69,7 +69,7 @@ function calculateUpgradesInTime(
 
 export const UpgradeCard: React.FC<UpgradeCardProps> = ({ upgrade, onOverrideChange, onBoostsChange, coinsAvailable, speedDividerValue, timePassed }) => {
 
-    const { affordableLevels, baseValue, increaseValue, endValue } = useMemo(() => {
+    const { affordableBase, affordableIncrease, baseValue, increaseValue, endValue } = useMemo(() => {
         // Use the override value if it exists, otherwise use the coins passed in props
         const effectiveCoins = upgrade.coinOverride ?? coinsAvailable;
 
@@ -94,12 +94,15 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({ upgrade, onOverrideCha
 
         // Calculate the base and increase values using their respective formulas
         let base = getValueForSingleLevel(affordableBase, upgrade.baseValueFormula);
+        let maxValue = upgrade.maxValue || 0;
 
         baseBoosts.forEach((boost) => {
             if (boost.type === "additive") {
                 base += boost.value;
+                maxValue += boost.value;
             } else {
                 base *= boost.value;
+                maxValue *= boost.value;
             }
         });
 
@@ -116,11 +119,18 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({ upgrade, onOverrideCha
         // The total value is the base value plus the increase value.
         const total = base + (increase * calculateUpgradesInTime(upgrade.baseUpgradeTime, timePassed, upgrade.id === "speedDivider" ? 1 : speedDividerValue));
 
+        let endValue;
+
+        if (upgrade.id === "chargeDuration") endValue = upgrade.maxValue != undefined && total < maxValue ? maxValue : total;
+        else endValue = upgrade.maxValue != undefined && total > maxValue ? maxValue : total;
+        
+
         return {
-            affordableLevels: affordableBase,
+            affordableBase: affordableBase,
+            affordableIncrease: affordableIncrease,
             baseValue: base,
             increaseValue: increase,
-            endValue: total,
+            endValue: endValue,
         };
     }, [upgrade, coinsAvailable, speedDividerValue, timePassed]);
 
@@ -144,7 +154,8 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({ upgrade, onOverrideCha
                         <Divider sx={{ my: 1 }} />
                         <StatDisplay label="Value At Time" value={endValue.toFixed(3)} />
                         <Divider sx={{ my: 1 }} />
-                        <StatDisplay label="Affordable Levels" value={`${affordableLevels} / ${upgrade.maxBaseLevel - upgrade.baseLevel}`} />
+                        <StatDisplay label="Affordable Base Levels" value={`${affordableBase} / ${upgrade.maxBaseLevel - upgrade.baseLevel}`} />
+                        <StatDisplay label="Affordable Increase Levels" value={`${affordableIncrease} / ${upgrade.maxIncreaseLevel - upgrade.increaseLevel}`} />
                     </Box>
 
                     <TextField

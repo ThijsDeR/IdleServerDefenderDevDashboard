@@ -112,6 +112,7 @@ export interface Upgrade {
     generalBoosts?: Boost[];
     baseBoosts?: Boost[];
     increaseBoosts?: Boost[];
+    maxValue?: number;
 }
 
 export interface Boost {
