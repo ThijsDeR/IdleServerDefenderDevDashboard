@@ -45,6 +45,7 @@ const calculateAdvancedFormulaValue = (level: number, formula: AdvancedFormula):
     let totalValue = 0;
     let levelsRemaining = level;
     let currentLevelCount = 0;
+    let partCounts = 0;
 
     // This logic calculates the cost of a single level by summing the effects
     // of all formula parts leading up to that level.
@@ -56,11 +57,12 @@ const calculateAdvancedFormulaValue = (level: number, formula: AdvancedFormula):
 
         // This calculation is equivalent to the C# AdvancedFormulaPart.GetValue
         const partValue = formula.baseAmount +
-            (((increaseCount * part.increaseAmount) / part.multiplierPer) * Math.pow(part.multiplierPer, 1 + (level / part.multiplierPerAmount)));
+            (((increaseCount * part.increaseAmount) / part.multiplierPer) * Math.pow(part.multiplierPer, 1 + (Math.min(level, partCounts + part.count) / part.multiplierPerAmount)));
         
         totalValue += partValue;
         levelsRemaining -= part.count;
         currentLevelCount += part.count;
+        partCounts += part.count;
     }
 
     return totalValue;

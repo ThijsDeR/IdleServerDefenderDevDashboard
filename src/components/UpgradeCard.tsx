@@ -1,10 +1,11 @@
 // src/components/UpgradeCard.tsx
 import React, { useMemo } from 'react';
-import { Card, CardContent, Typography, Box, TextField, Divider, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
-import type { Boost, UpgradeState } from '../types';
+import { Card, CardContent, Typography, Box, TextField, Divider, Accordion, AccordionSummary, AccordionDetails, TableContainer, Table, TableHead, TableCell, Paper, TableRow, TableBody } from '@mui/material';
+import type { Boost, Formula, UpgradeState } from '../types';
 import { calculateAffordableLevels, getValueForSingleLevel } from '../lib/formulas';
 import { ExpandMoreOutlined } from '@mui/icons-material';
 import { BoostEditor } from './BoostEditor';
+import { formatNumber } from '../lib/utils';
 
 interface UpgradeCardProps {
     upgrade: UpgradeState;
@@ -65,7 +66,16 @@ function calculateUpgradesInTime(
     return currentUpgrades;
 }
 
-
+/**
+ * Calculates the total cost to upgrade from a starting level to an end level.
+ */
+const calculateTotalCostForLevels = (startLevel: number, endLevel: number, formula: Formula): number => {
+    let totalCost = 0;
+    for (let i = startLevel; i < endLevel; i++) {
+        totalCost += getValueForSingleLevel(i + 1, formula);
+    }
+    return totalCost;
+};
 
 export const UpgradeCard: React.FC<UpgradeCardProps> = ({ upgrade, onOverrideChange, onBoostsChange, coinsAvailable, speedDividerValue, timePassed }) => {
 
@@ -123,7 +133,7 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({ upgrade, onOverrideCha
 
         if (upgrade.id === "chargeDuration") endValue = upgrade.maxValue != undefined && total < maxValue ? maxValue : total;
         else endValue = upgrade.maxValue != undefined && total > maxValue ? maxValue : total;
-        
+
 
         return {
             affordableBase: affordableBase,
@@ -133,6 +143,50 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({ upgrade, onOverrideCha
             endValue: endValue,
         };
     }, [upgrade, coinsAvailable, speedDividerValue, timePassed]);
+
+    const scalingData = useMemo(() => {
+        // Dynamically generate intervals so that within 5 steps, we reach maxBaseLevel or maxIncreaseLevel
+        const maxLevel = Math.max(upgrade.maxBaseLevel, upgrade.maxIncreaseLevel);
+        const steps = 10;
+        let intervals: number[] = [1, 10, 100, 500, 1000, 2000, 5000, 10000];
+
+        for (let i = 0; i <= steps; i++) {
+            const level = Math.round((i / steps) * maxLevel);
+            if (!intervals.includes(level) && level > 1000) intervals.push(level);
+        }
+
+        let lastBaseValue = getValueForSingleLevel(0, upgrade.baseValueFormula);
+        let lastIncreaseValue = getValueForSingleLevel(0, upgrade.increaseValueFormula);
+        let lastCost = 0;
+
+        return intervals
+            .filter(level => level < maxLevel)
+            .map(level => {
+                const currentBaseValue = getValueForSingleLevel(level, upgrade.baseValueFormula);
+                const currentIncreaseValue = getValueForSingleLevel(level, upgrade.increaseValueFormula);
+                const currentCost = calculateTotalCostForLevels(0, level, upgrade.coinCostFormula);
+
+                const baseValueGrowth = lastBaseValue > 0 ? (((currentBaseValue - lastBaseValue) / lastBaseValue)) * 100 : Infinity;
+                const increaseValueGrowth = lastIncreaseValue > 0 ? ((currentIncreaseValue - lastIncreaseValue) / lastIncreaseValue) * 100 : Infinity;
+                const costGrowth = lastCost > 0 ? ((currentCost - lastCost) / lastCost) * 100 : Infinity;
+
+                const dataPoint = {
+                    level,
+                    increaseValue: currentIncreaseValue,
+                    baseValue: currentBaseValue,
+                    cost: currentCost,
+                    baseValueGrowth,
+                    increaseValueGrowth,
+                    costGrowth,
+                };
+
+                lastBaseValue = currentBaseValue;
+                lastIncreaseValue = currentIncreaseValue;
+                lastCost = currentCost;
+
+                return dataPoint;
+            });
+    }, [upgrade.baseValueFormula, upgrade.coinCostFormula, upgrade.maxBaseLevel]);
 
     return (
         <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -157,6 +211,49 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({ upgrade, onOverrideCha
                         <StatDisplay label="Affordable Base Levels" value={`${affordableBase} / ${upgrade.maxBaseLevel - upgrade.baseLevel}`} />
                         <StatDisplay label="Affordable Increase Levels" value={`${affordableIncrease} / ${upgrade.maxIncreaseLevel - upgrade.increaseLevel}`} />
                     </Box>
+
+                    {/* Scaling Analysis Section */}
+                    <Accordion sx={{ boxShadow: 'none', border: '1px solid rgba(255, 255, 255, 0.12)' }}>
+                        <AccordionSummary expandIcon={<ExpandMoreOutlined />}>
+                            <Typography variant="subtitle1">Scaling Analysis</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <TableContainer component={Paper}>
+                                <Table size="small" aria-label="scaling analysis table">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>Level</TableCell>
+                                            <TableCell align="right">Base Value</TableCell>
+                                            <TableCell align="right">% Base Val Growth</TableCell>
+                                            <TableCell align="right">Increase Value</TableCell>
+                                            <TableCell align="right">% Increase Val Growth</TableCell>
+                                            <TableCell align="right">Total Cost</TableCell>
+                                            <TableCell align="right">% Cost Growth</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {scalingData.map((row) => (
+                                            <TableRow key={row.level}>
+                                                <TableCell component="th" scope="row">{row.level}</TableCell>
+                                                <TableCell align="right">{formatNumber(row.baseValue)}</TableCell>
+                                                <TableCell align="right" sx={{ color: isFinite(row.baseValueGrowth) ? 'success.main' : 'text.secondary' }}>
+                                                    {isFinite(row.baseValueGrowth) ? `+${formatNumber(row.baseValueGrowth)}%` : 'N/A'}
+                                                </TableCell>
+                                                <TableCell align="right">{formatNumber(row.increaseValue)}</TableCell>
+                                                <TableCell align="right" sx={{ color: isFinite(row.increaseValueGrowth) ? 'success.main' : 'text.secondary' }}>
+                                                    {isFinite(row.increaseValueGrowth) ? `+${formatNumber(row.increaseValueGrowth)}%` : 'N/A'}
+                                                </TableCell>
+                                                <TableCell align="right">{formatNumber(row.cost)}</TableCell>
+                                                <TableCell align="right" sx={{ color: isFinite(row.costGrowth) ? 'error.main' : 'text.secondary' }}>
+                                                    {isFinite(row.costGrowth) ? `+${formatNumber(row.costGrowth)}%` : 'N/A'}
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </AccordionDetails>
+                    </Accordion>
 
                     <TextField
                         label="Available Coins Override"

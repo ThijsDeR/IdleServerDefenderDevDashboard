@@ -115,7 +115,7 @@ export const UpgradesPage: React.FC = () => {
 
 
                     return (
-                        <Grid size={{ xs: 12, md: 6, lg: 4 }} key={upgrade.id}>
+                        <Grid size={{ xs: 12, md: 6, lg: 6 }} key={upgrade.id}>
                             <UpgradeCard
                                 upgrade={upgrade}
                                 onOverrideChange={handleOverrideChange}

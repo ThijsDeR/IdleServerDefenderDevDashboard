@@ -48,9 +48,36 @@ const defaultCheapCoinCostFormula: AdvancedFormula = {
     type: FormulaTypes.Advanced,
     baseAmount: 100,
     parts: [
-        { count: 5000, increaseAmount: 20, multiplierPer: 2.5, multiplierPerAmount: 500 },
-        { count: 45000, increaseAmount: 20, multiplierPer: 2.4, multiplierPerAmount: 500 },
-        { count: 100000, increaseAmount: 20, multiplierPer: 2.3, multiplierPerAmount: 500 },
+        {
+            count: 500,
+            increaseAmount: 20,
+            multiplierPer: 20,
+            multiplierPerAmount: 10000
+        },
+        {
+            count: 1000,
+            increaseAmount: 400,
+            multiplierPer: 20,
+            multiplierPerAmount: 10000
+        },
+        {
+            count: 3500,
+            increaseAmount: 6000,
+            multiplierPer: 20,
+            multiplierPerAmount: 10000
+        },
+        {
+            count: 5000,
+            increaseAmount: 40000,
+            multiplierPer: 20,
+            multiplierPerAmount: 10000
+        },
+        {
+            count: 1000000,
+            increaseAmount: 100000,
+            multiplierPer: 20,
+            multiplierPerAmount: 10000
+        },
     ]
 };
 
@@ -123,36 +150,7 @@ export const initialUpgrades: Upgrade[] = [
         maxIncreaseLevel: 10000,
         baseCoinCost: 100,
         baseUpgradeTime: 60,
-        coinCostFormula: {
-            type: 'advanced',
-            baseAmount: 100,
-            parts: [
-                {
-                    count: 100,
-                    increaseAmount: 100,
-                    multiplierPer: 1.1,
-                    multiplierPerAmount: 10
-                },
-                {
-                    count: 400,
-                    increaseAmount: 1000,
-                    multiplierPer: 1.5,
-                    multiplierPerAmount: 20
-                },
-                {
-                    count: 1500,
-                    increaseAmount: 10000,
-                    multiplierPer: 2,
-                    multiplierPerAmount: 50
-                },
-                {
-                    count: 8000,
-                    increaseAmount: 100000,
-                    multiplierPer: 2.5,
-                    multiplierPerAmount: 100
-                }
-            ]
-        },
+        coinCostFormula: defaultCheapCoinCostFormula,
         baseValueFormula: { type: FormulaTypes.Increase, baseAmount: 1, increaseAmount: 0.02 },
         increaseValueFormula: { type: FormulaTypes.Increase, baseAmount: 0.01, increaseAmount: 0.002 },
         generalBoosts: [
@@ -200,9 +198,87 @@ export const initialUpgrades: Upgrade[] = [
         maxIncreaseLevel: 100000,
         baseCoinCost: 100,
         baseUpgradeTime: 20,
-        coinCostFormula: { ...defaultCheapCoinCostFormula, baseAmount: 100 },
-        baseValueFormula: { type: FormulaTypes.Simple, baseAmount: 50, increaseAmount: 25, multiplierPer: 10, multiplierPerAmount: 650 },
-        increaseValueFormula: { type: FormulaTypes.Simple, baseAmount: 0.5, increaseAmount: 0.5, multiplierPer: 5, multiplierPerAmount: 550 },
+        coinCostFormula: defaultCheapCoinCostFormula,
+        baseValueFormula: {
+            type: FormulaTypes.Advanced,
+            baseAmount: 50,
+            parts: [
+                {
+                    count: 500,
+                    increaseAmount: 25,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 1000,
+                    increaseAmount: 250,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 3500,
+                    increaseAmount: 2500,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 5000,
+                    increaseAmount: 25000,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 100000,
+                    increaseAmount: 100000,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+            ]
+        },
+        // baseValueFormula: { 
+        //     type: FormulaTypes.Simple,
+        //     baseAmount: 50,
+        //     increaseAmount: 25,
+        //     multiplierPer: 10,
+        //     multiplierPerAmount: 650 
+        // },
+        increaseValueFormula: {
+            type: FormulaTypes.Advanced,
+            baseAmount: 0.5,
+            parts: [
+                {
+                    count: 500,
+                    increaseAmount: 0.5,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 1000,
+                    increaseAmount: 5,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 3500,
+                    increaseAmount: 50,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 5000,
+                    increaseAmount: 500,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 100000,
+                    increaseAmount: 5000,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+            ]
+        },
+        // increaseValueFormula: { type: FormulaTypes.Simple, baseAmount: 0.5, increaseAmount: 0.5, multiplierPer: 5, multiplierPerAmount: 550 },
         generalBoosts: [
             { name: 'Health Boost', type: 'multiplicative', value: 1 },
             { name: 'Health Download', type: 'multiplicative', value: 1 },
@@ -210,7 +286,7 @@ export const initialUpgrades: Upgrade[] = [
         ],
         baseBoosts: [
             { name: 'Health Prestige', type: 'multiplicative', value: 1 },
-            
+
         ],
         increaseBoosts: [
             { name: 'Health Prestige', type: 'multiplicative', value: 1 },
@@ -226,8 +302,80 @@ export const initialUpgrades: Upgrade[] = [
         baseCoinCost: 100,
         baseUpgradeTime: 20,
         coinCostFormula: { ...defaultCheapCoinCostFormula, baseAmount: 100 },
-        baseValueFormula: { type: FormulaTypes.Simple, baseAmount: 5, increaseAmount: 2.5, multiplierPer: 10, multiplierPerAmount: 650 },
-        increaseValueFormula: { type: FormulaTypes.Simple, baseAmount: 0.2, increaseAmount: 0.2, multiplierPer: 2, multiplierPerAmount: 550 },
+        baseValueFormula: {
+            type: FormulaTypes.Advanced,
+            baseAmount: 5,
+            parts: [
+                {
+                    count: 500,
+                    increaseAmount: 2.5,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 1000,
+                    increaseAmount: 25,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 3500,
+                    increaseAmount: 250,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 5000,
+                    increaseAmount: 2500,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 100000,
+                    increaseAmount: 10000,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+            ]
+        },
+        increaseValueFormula: {
+            type: FormulaTypes.Advanced,
+            baseAmount: 0.1,
+            parts: [
+                {
+                    count: 500,
+                    increaseAmount: 0.1,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 1000,
+                    increaseAmount: 1,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 3500,
+                    increaseAmount: 10,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 5000,
+                    increaseAmount: 100,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 100000,
+                    increaseAmount: 400,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+            ]
+        },
+        // baseValueFormula: { type: FormulaTypes.Simple, baseAmount: 5, increaseAmount: 2.5, multiplierPer: 10, multiplierPerAmount: 650 },
+        // increaseValueFormula: { type: FormulaTypes.Simple, baseAmount: 0.2, increaseAmount: 0.2, multiplierPer: 2, multiplierPerAmount: 550 },
         generalBoosts: [
             { name: 'Health Regen Boost', type: 'multiplicative', value: 1 },
             { name: 'Health Regen Download', type: 'multiplicative', value: 1 },
@@ -249,9 +397,79 @@ export const initialUpgrades: Upgrade[] = [
         maxIncreaseLevel: 100000,
         baseCoinCost: 100,
         baseUpgradeTime: 20,
-        coinCostFormula: { ...defaultCheapCoinCostFormula, baseAmount: 100 },
-        baseValueFormula: { type: FormulaTypes.Simple, baseAmount: 20, increaseAmount: 10, multiplierPer: 10, multiplierPerAmount: 650 },
-        increaseValueFormula: { type: FormulaTypes.Simple, baseAmount: 0.25, increaseAmount: 0.25, multiplierPer: 5, multiplierPerAmount: 550 },
+        coinCostFormula: defaultCheapCoinCostFormula,
+        baseValueFormula: {
+            type: FormulaTypes.Advanced,
+            baseAmount: 20,
+            parts: [
+                {
+                    count: 500,
+                    increaseAmount: 10,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 1000,
+                    increaseAmount: 100,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 3500,
+                    increaseAmount: 1000,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 5000,
+                    increaseAmount: 10000,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 100000,
+                    increaseAmount: 50000,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+            ]
+        },
+        increaseValueFormula: {
+            type: FormulaTypes.Advanced,
+            baseAmount: 0.5,
+            parts: [
+                {
+                    count: 500,
+                    increaseAmount: 0.25,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 1000,
+                    increaseAmount: 2.5,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 3500,
+                    increaseAmount: 25,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 5000,
+                    increaseAmount: 250,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 100000,
+                    increaseAmount: 2500,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+            ]
+        },
         generalBoosts: [
             { name: 'Damage Boost', type: 'multiplicative', value: 1 },
             { name: 'Damage Download', type: 'multiplicative', value: 1 },
@@ -440,8 +658,80 @@ export const initialUpgrades: Upgrade[] = [
         baseCoinCost: 500,
         baseUpgradeTime: 60,
         coinCostFormula: { ...defaultCheapCoinCostFormula, baseAmount: 500 },
-        baseValueFormula: { type: FormulaTypes.Simple, baseAmount: 100, increaseAmount: 25, multiplierPer: 10, multiplierPerAmount: 650 },
-        increaseValueFormula: { type: FormulaTypes.Simple, baseAmount: 1, increaseAmount: 1, multiplierPer: 5, multiplierPerAmount: 500 },
+        baseValueFormula: {
+            type: FormulaTypes.Advanced,
+            baseAmount: 100,
+            parts: [
+                {
+                    count: 500,
+                    increaseAmount: 25,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 1000,
+                    increaseAmount: 250,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 3500,
+                    increaseAmount: 2500,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 5000,
+                    increaseAmount: 25000,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 100000,
+                    increaseAmount: 100000,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+            ]
+        },
+        increaseValueFormula: {
+            type: FormulaTypes.Advanced,
+            baseAmount: 1,
+            parts: [
+                {
+                    count: 500,
+                    increaseAmount: 1,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 1000,
+                    increaseAmount: 10,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 3500,
+                    increaseAmount: 100,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 5000,
+                    increaseAmount: 1000,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 100000,
+                    increaseAmount: 4000,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+            ]
+        },
+        // baseValueFormula: { type: FormulaTypes.Simple, baseAmount: 100, increaseAmount: 25, multiplierPer: 10, multiplierPerAmount: 650 },
+        // increaseValueFormula: { type: FormulaTypes.Simple, baseAmount: 1, increaseAmount: 1, multiplierPer: 5, multiplierPerAmount: 500 },
         generalBoosts: [
             { name: 'Shield Boost', type: 'multiplicative', value: 1 },
             { name: 'Shield Module', type: 'multiplicative', value: 1 },
@@ -463,8 +753,80 @@ export const initialUpgrades: Upgrade[] = [
         baseCoinCost: 500,
         baseUpgradeTime: 60,
         coinCostFormula: { ...defaultCheapCoinCostFormula, baseAmount: 500 },
-        baseValueFormula: { type: FormulaTypes.Simple, baseAmount: 2, increaseAmount: 2.5, multiplierPer: 10, multiplierPerAmount: 650 },
-        increaseValueFormula: { type: FormulaTypes.Simple, baseAmount: 0.125, increaseAmount: 0.125, multiplierPer: 2, multiplierPerAmount: 550 },
+        baseValueFormula: {
+            type: FormulaTypes.Advanced,
+            baseAmount: 20,
+            parts: [
+                {
+                    count: 500,
+                    increaseAmount: 5,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 1000,
+                    increaseAmount: 50,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 3500,
+                    increaseAmount: 500,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 5000,
+                    increaseAmount: 5000,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 100000,
+                    increaseAmount: 10000,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+            ]
+        },
+        increaseValueFormula: {
+            type: FormulaTypes.Advanced,
+            baseAmount: 0.125,
+            parts: [
+                {
+                    count: 500,
+                    increaseAmount: 0.125,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 1000,
+                    increaseAmount: 1.25,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 3500,
+                    increaseAmount: 12.5,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 5000,
+                    increaseAmount: 125,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+                {
+                    count: 100000,
+                    increaseAmount: 500,
+                    multiplierPer: 10,
+                    multiplierPerAmount: 10000
+                },
+            ]
+        },
+        // baseValueFormula: { type: FormulaTypes.Simple, baseAmount: 20, increaseAmount: 2.5, multiplierPer: 10, multiplierPerAmount: 650 },
+        // increaseValueFormula: { type: FormulaTypes.Simple, baseAmount: 0.125, increaseAmount: 0.125, multiplierPer: 2, multiplierPerAmount: 550 },
         generalBoosts: [
             { name: 'Shield Regen Boost', type: 'multiplicative', value: 1 },
             { name: 'Shield Regen Module', type: 'multiplicative', value: 1 },
