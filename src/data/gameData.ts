@@ -96,4 +96,4 @@ export const tierCoinMultipliers: number[] = [1, 1.1, 1.2, 1.3, 1.4];
 /**
  * Specific wave numbers to show in the snapshot view.
  */
-export const snapshotWaves: number[] = [1, 10, 25, 50, 100, 200, 500, 1000];
+export const snapshotWaves: number[] = [1, 10, 25, 50, 100, 200, 500, 1000, 2000, 4000];

@@ -1,14 +1,27 @@
 // src/pages/GameSimulatorPage.tsx
-import React, { useState, useMemo } from 'react';
-import {
-    Container, Typography, Box, Paper, Grid, TextField,
-    Select, MenuItem, InputLabel, FormControl, Divider, Accordion, AccordionSummary, AccordionDetails, type SelectChangeEvent
-} from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { cups, tierCoinMultipliers, tierDifficultyMultipliers } from '../data/gameData';
-import type { Boost } from '../types';
+import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+    Box,
+    Container,
+    Divider,
+    FormControl,
+    Grid,
+    InputLabel,
+    MenuItem,
+    Paper,
+    Select,
+    TextField,
+    Typography,
+    type SelectChangeEvent
+} from '@mui/material';
+import React, { useMemo, useState } from 'react';
 import { BoostEditor } from '../components/BoostEditor';
+import { cups, tierCoinMultipliers, tierDifficultyMultipliers } from '../data/gameData';
 import { calculateEnemySpawnTime, formatNumber } from '../lib/utils';
+import type { Boost } from '../types';
 
 // A small component to display a result stat
 const ResultDisplay = ({ label, value }: { label: string; value: string | number }) => (
@@ -21,11 +34,19 @@ const ResultDisplay = ({ label, value }: { label: string; value: string | number
 const calculateTotalEnemies = (waves: number, waveTime: number, difficulty: number): number => {
     let totalEnemies = 0;
     for (let i = 1; i <= waves; i++) {
-        if (i % 10 == 0) totalEnemies += 20;
+        if (i % 10 == 0) continue;
         else totalEnemies += waveTime / calculateEnemySpawnTime(i, difficulty);
     }
     return totalEnemies;
 };
+
+const calculateTotalBosses = (waves: number): number => {
+    let totalBosses = 0;
+    for (let i = 1; i <= waves; i++) {
+        if (i % 10 == 0) totalBosses += 1;
+    }
+    return totalBosses;
+}
 
 const calculateCoins = (amount: number, boosts: Boost[]) => {
     let finalAmount = amount;
@@ -70,22 +91,26 @@ export const GameSimulatorPage: React.FC = () => {
         const coinsFromCoinsPerWave = calculateCoins(coinsPerWave * waveReached * coinMultiplier, coinBoosts);
 
         const totalEnemies = calculateTotalEnemies(waveReached, waveTime, difficultyMultiplier);
+        const totalBosses = calculateTotalBosses(waveReached);
 
         const coinsFromEnemies = calculateCoins(totalEnemies * 5 * coinMultiplier, [...coinBoosts, ...enemyBoosts]);
+        const coinsFromBosses = calculateCoins(totalBosses * 100 * coinMultiplier, [...coinBoosts, ...enemyBoosts]);
 
-        const finalCoins = coinsFromCoinsPerWave + coinsFromEnemies;
+        const finalCoins = coinsFromCoinsPerWave + coinsFromEnemies + coinsFromBosses;
 
         const timeTaken = (waveTime * waveReached) / gameSpeed;
 
         const coinsPerMinute = timeTaken > 0 ? (finalCoins / timeTaken) * 60 : 0;
 
         // Placeholder for experience calculation
-        const totalExperience = totalEnemies * selectedCup.experienceMultiplier;
+        const totalExperience = ((totalEnemies * 2) + (totalBosses * 100)) * selectedCup.experienceMultiplier;
 
         return {
             totalEnemies: totalEnemies,
+            totalBosses: totalBosses,
             coinMultiplier: coinMultiplier,
             coinsFromEnemies: coinsFromEnemies,
+            coinsFromBosses: coinsFromBosses,
             coinsFromCoinsPerWave: coinsFromCoinsPerWave,
             totalCoins: finalCoins,
             coinsPerMinute: coinsPerMinute,
@@ -179,9 +204,11 @@ export const GameSimulatorPage: React.FC = () => {
                         {simulationResults && (
                             <Box>
                                 <ResultDisplay label="Total Enemies Defeated" value={formatNumber(simulationResults.totalEnemies)} />
+                                <ResultDisplay label="Total Bosses Defeated" value={formatNumber(simulationResults.totalBosses)} />
                                 <ResultDisplay label="Coin Multiplier" value={simulationResults.coinMultiplier.toFixed(2) + 'x'} />
                                 <Divider sx={{ my: 1 }} />
                                 <ResultDisplay label="Coins from Enemies" value={formatNumber(simulationResults.coinsFromEnemies)} />
+                                <ResultDisplay label="Coins from Bosses" value={formatNumber(simulationResults.coinsFromBosses)} />
                                 <ResultDisplay label="Coins from Waves" value={formatNumber(simulationResults.coinsFromCoinsPerWave)} />
                                 <Divider sx={{ my: 1 }} />
                                 <ResultDisplay label="Total Coins Earned" value={formatNumber(simulationResults.totalCoins)} />

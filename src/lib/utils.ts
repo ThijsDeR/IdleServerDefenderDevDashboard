@@ -60,7 +60,7 @@ export const calculateEnemyHealth = (x: number, d: number): number => {
 
     const cupFactor = getCupProgressionFactor(d);
 
-    const waveMultiplier = (1 + (x - 1) * 0.5) + Math.pow(10, (x - 1) / 100) - 1;
+    const waveMultiplier = (1 + (x - 1) * 0.5) + Math.pow(10, (x - 1) / 180) - 1;
 
     return (baseHealth * cupFactor * waveMultiplier) + cupFactor;
 };

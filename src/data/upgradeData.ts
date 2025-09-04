@@ -36,6 +36,14 @@ const defaultMediumCoinCostFormula: SimpleFormula = {
     multiplierPerAmount: 500,
 };
 
+const defaultMediumExpensiveCoinCostFormula: SimpleFormula = {
+    type: FormulaTypes.Simple,
+    baseAmount: 200,
+    increaseAmount: 100,
+    multiplierPer: 50,
+    multiplierPerAmount: 500,
+};
+
 const defaultExpensiveCoinCostFormula: SimpleFormula = {
     type: FormulaTypes.Simple,
     baseAmount: 1000,
@@ -111,8 +119,8 @@ export const initialUpgrades: Upgrade[] = [
         baseCoinCost: 100,
         baseUpgradeTime: 60,
         coinCostFormula: { ...defaultCoinCostFormula, baseAmount: 100 },
-        baseValueFormula: { type: FormulaTypes.Increase, baseAmount: 0, increaseAmount: 2 },
-        increaseValueFormula: { type: FormulaTypes.Increase, baseAmount: 0.01, increaseAmount: 0.01 },
+        baseValueFormula: { type: FormulaTypes.Increase, baseAmount: 20, increaseAmount: 2 },
+        increaseValueFormula: { type: FormulaTypes.Increase, baseAmount: 0.25, increaseAmount: 0.25 },
         generalBoosts: [
             { name: 'BPW Download', type: 'multiplicative', value: 1 }
         ],
@@ -123,13 +131,13 @@ export const initialUpgrades: Upgrade[] = [
         title: 'Bits Per Enemy',
         description: 'Get bits for every enemy you kill. The amount of bits you get is based on your current level and increase level.',
         type: UpgradeTypes.Utility,
-        maxBaseLevel: 380,
-        maxIncreaseLevel: 800,
+        maxBaseLevel: 1000,
+        maxIncreaseLevel: 5000,
         baseCoinCost: 100,
         baseUpgradeTime: 60,
-        coinCostFormula: { ...defaultCoinCostFormula, baseAmount: 100 },
-        baseValueFormula: { type: FormulaTypes.Increase, baseAmount: 1, increaseAmount: 0.005 },
-        increaseValueFormula: { type: FormulaTypes.Increase, baseAmount: 0.001, increaseAmount: 0.001 },
+        coinCostFormula: { ...defaultMediumExpensiveCoinCostFormula, baseAmount: 100 },
+        baseValueFormula: { type: FormulaTypes.Increase, baseAmount: 1, increaseAmount: 0.02 },
+        increaseValueFormula: { type: FormulaTypes.Increase, baseAmount: 0.01, increaseAmount: 0.002 },
         generalBoosts: [
             { name: 'BPE Download', type: 'multiplicative', value: 1 },
         ],
@@ -148,9 +156,9 @@ export const initialUpgrades: Upgrade[] = [
         type: UpgradeTypes.Utility,
         maxBaseLevel: 2000,
         maxIncreaseLevel: 10000,
-        baseCoinCost: 100,
+        baseCoinCost: 200,
         baseUpgradeTime: 60,
-        coinCostFormula: defaultCheapCoinCostFormula,
+        coinCostFormula: { ...defaultMediumExpensiveCoinCostFormula, baseAmount: 200 },
         baseValueFormula: { type: FormulaTypes.Increase, baseAmount: 1, increaseAmount: 0.02 },
         increaseValueFormula: { type: FormulaTypes.Increase, baseAmount: 0.01, increaseAmount: 0.002 },
         generalBoosts: [
@@ -211,25 +219,25 @@ export const initialUpgrades: Upgrade[] = [
                 },
                 {
                     count: 1000,
-                    increaseAmount: 250,
+                    increaseAmount: 100,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 3500,
-                    increaseAmount: 2500,
+                    increaseAmount: 400,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 5000,
-                    increaseAmount: 25000,
+                    increaseAmount: 1000,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 100000,
-                    increaseAmount: 100000,
+                    increaseAmount: 4000,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
@@ -249,31 +257,31 @@ export const initialUpgrades: Upgrade[] = [
                 {
                     count: 500,
                     increaseAmount: 0.5,
-                    multiplierPer: 10,
+                    multiplierPer: 8,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 1000,
-                    increaseAmount: 5,
-                    multiplierPer: 10,
+                    increaseAmount: 2,
+                    multiplierPer: 8,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 3500,
-                    increaseAmount: 50,
-                    multiplierPer: 10,
+                    increaseAmount: 5,
+                    multiplierPer: 8,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 5000,
-                    increaseAmount: 500,
-                    multiplierPer: 10,
+                    increaseAmount: 20,
+                    multiplierPer: 8,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 100000,
-                    increaseAmount: 5000,
-                    multiplierPer: 10,
+                    increaseAmount: 50,
+                    multiplierPer: 8,
                     multiplierPerAmount: 10000
                 },
             ]
@@ -314,25 +322,25 @@ export const initialUpgrades: Upgrade[] = [
                 },
                 {
                     count: 1000,
-                    increaseAmount: 25,
+                    increaseAmount: 10,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 3500,
-                    increaseAmount: 250,
+                    increaseAmount: 40,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 5000,
-                    increaseAmount: 2500,
+                    increaseAmount: 100,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 100000,
-                    increaseAmount: 10000,
+                    increaseAmount: 400,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
@@ -350,25 +358,25 @@ export const initialUpgrades: Upgrade[] = [
                 },
                 {
                     count: 1000,
-                    increaseAmount: 1,
+                    increaseAmount: 0.4,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 3500,
-                    increaseAmount: 10,
+                    increaseAmount: 1,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 5000,
-                    increaseAmount: 100,
+                    increaseAmount: 4,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 100000,
-                    increaseAmount: 400,
+                    increaseAmount: 10,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
@@ -410,25 +418,25 @@ export const initialUpgrades: Upgrade[] = [
                 },
                 {
                     count: 1000,
-                    increaseAmount: 100,
+                    increaseAmount: 40,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 3500,
-                    increaseAmount: 1000,
+                    increaseAmount: 100,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 5000,
-                    increaseAmount: 10000,
+                    increaseAmount: 400,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 100000,
-                    increaseAmount: 50000,
+                    increaseAmount: 1000,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
@@ -441,31 +449,31 @@ export const initialUpgrades: Upgrade[] = [
                 {
                     count: 500,
                     increaseAmount: 0.25,
-                    multiplierPer: 10,
+                    multiplierPer: 8,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 1000,
-                    increaseAmount: 2.5,
-                    multiplierPer: 10,
+                    increaseAmount: 1.25,
+                    multiplierPer: 8,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 3500,
-                    increaseAmount: 25,
-                    multiplierPer: 10,
+                    increaseAmount: 5,
+                    multiplierPer: 8,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 5000,
-                    increaseAmount: 250,
-                    multiplierPer: 10,
+                    increaseAmount: 25,
+                    multiplierPer: 8,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 100000,
-                    increaseAmount: 2500,
-                    multiplierPer: 10,
+                    increaseAmount: 100,
+                    multiplierPer: 8,
                     multiplierPerAmount: 10000
                 },
             ]
@@ -670,25 +678,25 @@ export const initialUpgrades: Upgrade[] = [
                 },
                 {
                     count: 1000,
-                    increaseAmount: 250,
+                    increaseAmount: 100,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 3500,
-                    increaseAmount: 2500,
+                    increaseAmount: 400,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 5000,
-                    increaseAmount: 25000,
+                    increaseAmount: 1000,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 100000,
-                    increaseAmount: 100000,
+                    increaseAmount: 4000,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
@@ -706,25 +714,25 @@ export const initialUpgrades: Upgrade[] = [
                 },
                 {
                     count: 1000,
-                    increaseAmount: 10,
+                    increaseAmount: 4,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 3500,
-                    increaseAmount: 100,
+                    increaseAmount: 10,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 5000,
-                    increaseAmount: 1000,
+                    increaseAmount: 40,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 100000,
-                    increaseAmount: 4000,
+                    increaseAmount: 100,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
@@ -765,25 +773,25 @@ export const initialUpgrades: Upgrade[] = [
                 },
                 {
                     count: 1000,
-                    increaseAmount: 50,
+                    increaseAmount: 20,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 3500,
-                    increaseAmount: 500,
+                    increaseAmount: 50,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 5000,
-                    increaseAmount: 5000,
+                    increaseAmount: 200,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 100000,
-                    increaseAmount: 10000,
+                    increaseAmount: 500,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
@@ -801,25 +809,25 @@ export const initialUpgrades: Upgrade[] = [
                 },
                 {
                     count: 1000,
-                    increaseAmount: 1.25,
+                    increaseAmount: 0.5,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 3500,
-                    increaseAmount: 12.5,
+                    increaseAmount: 2,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 5000,
-                    increaseAmount: 125,
+                    increaseAmount: 5,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },
                 {
                     count: 100000,
-                    increaseAmount: 500,
+                    increaseAmount: 20,
                     multiplierPer: 10,
                     multiplierPerAmount: 10000
                 },

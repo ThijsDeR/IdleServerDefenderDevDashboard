@@ -152,7 +152,7 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({ upgrade, onOverrideCha
 
         for (let i = 0; i <= steps; i++) {
             const level = Math.round((i / steps) * maxLevel);
-            if (!intervals.includes(level) && level > 1000) intervals.push(level);
+            if (!intervals.includes(level) && level > 10000) intervals.push(level);
         }
 
         let lastBaseValue = getValueForSingleLevel(0, upgrade.baseValueFormula);

@@ -10,6 +10,8 @@ import { EnemyScalingPage } from './pages/EnemyScalingPage';
 import { HomePage } from './pages/HomePage';
 import { UpgradesPage } from './pages/UpgradesPage';
 import { GameSimulatorPage } from './pages/GameSimulatorPage';
+import ExecutableDropRatePage from './pages/ExecutablePage';
+import { ExperiencePage } from './pages/ExperiencePage';
 
 const App: React.FC = () => {
     return (
@@ -27,6 +29,8 @@ const App: React.FC = () => {
                         <Route path="EnemyScaling" element={<EnemyScalingPage />} />
                         <Route path="Upgrades" element={<UpgradesPage />} />
                         <Route path="GameSimulator" element={<GameSimulatorPage />} />
+                        <Route path="Executable" element={<ExecutableDropRatePage />} />
+                        <Route path="Experience" element={<ExperiencePage />} />
                     </Route>
                 </Routes>
             </BrowserRouter>
